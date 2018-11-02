@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <style>
+        textarea{
+            min-width:27%;
+            min-height:150px;
+            font-size: 20px;
+            
+        }
+        button{
+            padding: 5px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+ 
+<textarea  id="strInput" placeholder="String input"></textarea>
+<button id="listener1" >!StrToBin</button>
+<textarea  id="binOutput" placeholder="Binary input/output"></textarea>
+<button id="listener2" >!BinToStr</button>
+<textarea  id="strOutput" placeholder="Binary to Stirng Output"></textarea>
+<textarea  id="decOutput" placeholder="Decimal/ascii Output"></textarea>
+<button id="listener3" >!BinToDec</button>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+    
+    $('#listener1').bind('click',function(){
+        
+        let value = $('#strInput').val();
+        
+         let binary = function(val){
+            let sb = '';
+            for(let i=0; i<val.length; i++){
+                sb += val.charCodeAt(i).toString(2)+' ';
+            }
+            return sb;
+        }
+        $('#binOutput').val(binary(value));
+        
+    });
+    
+    $('#listener2').bind('click',function(){
+        let binValue =  $('#binOutput').val(),
+                  sd = '';
+        let str = function(val){
+            let strVal = val.split(' ');
+            let ss = '';
+            for(let i=0; i<strVal.length-1; i++){
+               ss += String.fromCharCode(binToDec(strVal[i])); 
+            }
+            return ss;
+        }
+       
+        $('#strOutput').val(str(binValue));  
+       
+    });
+    $('#listener3').on('click',function(){
+         let dec = function(val){
+            let strVal = val.split(' ');
+            let sd = '';
+            for(let i=0; i<strVal.length-1; i++){
+               sd += binToDec(strVal[i])+' '; 
+            }
+            return sd;
+        }
+         $('#decOutput').val(dec($('#binOutput').val()))
+    })
+    
+    function binToDec(a){
+        let value = String(a);
+        if(value.search(/(\.)\d+/) != -1 ){
+            let int = forFloat(value.slice(value.indexOf('.')+1)),
+              float = forInt(value.slice(0,value.indexOf('.')));
+            return int+float;
+        }else{
+            if(value.indexOf('.') != -1){
+               return forInt(value.slice(0,value.indexOf('.')));
+            }else{
+               return forInt(value);
+            }
+        }
+         function forInt(intValue){
+            let int = 0
+            for(let i=intValue.length-1; i>-1; i--){
+               if(parseFloat( intValue.charAt((intValue.length-1)-i)) === 0){continue;}
+               int += Math.pow(2,i);
+            }
+            return int;
+        }
+        function forFloat(floatValue){
+            let float = 0
+            for(let i=0; i<floatValue.length; i++){
+               if(parseFloat( floatValue.charAt(i)) === 0){continue;}
+               float += Math.pow(1/2,i+1);
+            }
+            return float;
+        }
+    }
+   
+
+</script>
+ 
+</body>
+</html>
